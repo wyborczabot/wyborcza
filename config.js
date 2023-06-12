@@ -1,2 +1,2 @@
-HOME_URL=window.location.origin;
+var HOME_URL="https://wyborczabot.github.io/wyborcza/";
 console.log("wczytano config");
