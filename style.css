@@ -1,19 +1,25 @@
 body {
-    background-color: #92a8d1;
-    margin-left: 20%; margin-right: 20%
+	background-color: #92a8d1;
+	margin-left: 20%;
+	margin-right: 20%
 }
-p{
-    font-size: x-large;
-}
-em{
+
+p {
 	font-size: x-large;
 }
-STRONG{
-    font-size: xx-large;
-}
-a{
+
+em {
 	font-size: x-large;
 }
+
+STRONG {
+	font-size: xx-large;
+}
+
+a {
+	font-size: x-large;
+}
+
 a:link {
 	color: black;
 	background-color: transparent;
