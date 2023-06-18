@@ -18,7 +18,7 @@ function createHTMLNode(htmlCode, tooltip) {
 
 function genUrl(text, redirect) {
     var a = document.createElement('a');
-    var link = createHTMLNode(text);
+    var link = createHTMLNode(text, text);
     a.appendChild(link);
     a.title = text;
     a.href = redirect;
@@ -53,12 +53,9 @@ function render(data) {
     writeStrong(data.sectionName, "large");
     endWrite();
 
-    write("Autor: ");
-    write(data.signature);
-    endWrite();
 
     write("Tagi: ");
-    write((data.tags).map(e => '#'+e).join(' '));
+    write((data.tags).map(e => '#' + e).join(' '));
     endWrite();
 
     write("Data Publikacji: ");
@@ -70,6 +67,12 @@ function render(data) {
     document.title = data.title;
     endWrite();
 
+    write("Autor(zy): ");
+    write(data.signature);
+    endWrite();
+
+    writeStrong(data.lead, "xx-large");
+
     var n = data.contentJson.blocks[0].elements.length, i;
     for (i = 0; i < n; ++i) {
         var obj = data.contentJson.blocks[0].elements[i];
@@ -80,6 +83,7 @@ function render(data) {
             var m = obj.items.length;
             if (m > 1) err();
             writeStrong(Text, "xx-large");
+            endWrite();
         }
 
         else if (type == 'paragraph') {
@@ -154,16 +158,16 @@ function render(data) {
         else err();
     }
     endWrite();
-    write("powiązane artykuły:");
+    write("<i>powiązane artykuły i zdjęcia:</i>");
     endWrite();
 
-    data.related.forEach(function(element){
-        if(element.type=="PHOTO"){
+    data.related.forEach(function (element) {
+        if (element.type == "PHOTO") {
             image(element.url, element.signature);
             endWrite();
         }
-        else if(element.type=="ARTICLE"){
-            write(genUrl(element.title,element.url))
+        else if (element.type == "ARTICLE") {
+            write(genUrl(element.title, element.url))
             endWrite();
         }
     });
