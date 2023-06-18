@@ -16,13 +16,13 @@ function createHTMLNode(htmlCode, tooltip) {
     return htmlNode;
 }
 
-function writeUrl(text, redirect) {
+function genUrl(text, redirect) {
     var a = document.createElement('a');
     var link = createHTMLNode(text);
     a.appendChild(link);
-    a.title = Text;
+    a.title = text;
     a.href = redirect;
-    document.body.appendChild(a);
+    return a.outerHTML;
 }
 
 function write(input) {
@@ -44,13 +44,8 @@ function err() {
     alert("natrafiono na nieobsługiwany fragment artykulu, zglos blad deweloperowi")
 }
 
-function extractContent(html) {
-    return new DOMParser()
-        .parseFromString(html, "text/html")
-}
 
 function render(data) {
-    var publicationDate = new Date(data.dateFromTs).toLocaleDateString();
 
     console.log(data);
 
@@ -62,7 +57,12 @@ function render(data) {
     write(data.signature);
     endWrite();
 
+    write("Tagi: ");
+    write((data.tags).map(e => '#'+e).join(' '));
+    endWrite();
+
     write("Data Publikacji: ");
+    var publicationDate = new Date(data.dateFromTs).toLocaleDateString();
     write(publicationDate);
     endWrite()
 
@@ -92,9 +92,7 @@ function render(data) {
                 else if (subType == "uomImage") continue;
                 else if (subType == "externalLink") {
                     var redirect = art[j].url;
-                    endWrite();
-                    writeUrl(Text, "?url=" + redirect);
-                    endWrite();
+                    write(genUrl(Text, "?url=" + redirect));
                 }
                 else err();
             }
@@ -127,7 +125,7 @@ function render(data) {
                 }
                 else err();
             }
-            writeUrl(out, "?url=" + redirect);
+            write(genUrl(out, "?url=" + redirect));
             endWrite();
         }
         else if (type == 'embed') {
@@ -136,7 +134,7 @@ function render(data) {
                 var Text = obj.items[0].text;
                 var redirect = obj.items[0].url;
                 endWrite();
-                writeUrl("Powiazany artykul: " + Text, "?url=" + redirect);
+                write(genUrl("Powiazany artykul: " + Text, "?url=" + redirect));
                 endWrite();
             }
             else if (subType = "outerGifImage") {
@@ -155,5 +153,20 @@ function render(data) {
         else if (type == 'orderedList') continue;
         else err();
     }
+    endWrite();
+    write("powiązane artykuły:");
+    endWrite();
+
+    data.related.forEach(function(element){
+        if(element.type=="PHOTO"){
+            image(element.url, element.signature);
+            endWrite();
+        }
+        else if(element.type=="ARTICLE"){
+            write(genUrl(element.title,element.url))
+            endWrite();
+        }
+    });
+
     document.body.appendChild(p);
 }
