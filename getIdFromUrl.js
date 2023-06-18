@@ -18,7 +18,7 @@ var znak = '';
 for (var i = 0; i < linkIn.length; i++) {
     znak = linkIn[i];
     if (przec == 2 && !['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(znak)) ++przec;
-    if (przec == 2) id += znak;
+    if (przec == 2 && ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(znak)) id += znak;
 
     if (znak == ",") przec++;
 }
