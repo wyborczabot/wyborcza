@@ -3,11 +3,16 @@ var triesNumber=0;
 var fetched = false;
 
 function fetchjson() {
-    if(triesNumber==10){
+    if(triesNumber==TIMEOUT_CONFIRM){
         if(!confirm("przekroczono czas oczekiwania, upewnij się że link podany przez ciebie jest poprawny, czy chcesz kontynuować próby pobrania danych?")){
             clearInterval(intervalId);
             console.log("anulowano pobieranie danych");
         }
+    }
+    if(triesNumber==TIMEOUT_BREAK){
+        alert("przekroczono ostateczny czas oczekiwania, upewnij się że link podany przez ciebie jest poprawny, spróbuj ponownie za kilka minut")
+        clearInterval(intervalId);
+        console.log("anulowano pobieranie danych");
     }
     $.ajax({
         url: 'http://www.whateverorigin.org/get?url=' + encodeURIComponent('https://gwwin8.gazeta.pl/gwipad2/v2/portalAPIArticle.json?xxArt=' + id) + '&callback=?',
